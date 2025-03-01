@@ -27,6 +27,9 @@ const UserTable = ({ users, onUserClick }) => {
                         ))}
                     </tbody>
                 </table>
+                <div className="table-footer text-muted text-center mt-2">
+                        Mostrando {users.length} registros
+                </div>
             </div>
         </div>
     );

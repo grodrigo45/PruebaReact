@@ -9,6 +9,7 @@ const App = () => {
   const [selectedUser, setSelectedUser] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
+  const [recordsPerPage, setRecordsPerPage] = useState(10); // 🔹 Estado para cantidad de registros a mostrar
 
   const handleUserClick = (user) => {
     console.log("Usuario Seleccionado: ", user);
@@ -21,24 +22,39 @@ const App = () => {
     setShowModal(false);
   };
 
+  // Filtrar usuarios 
   const filteredUsers = users.filter((user) =>
     user.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  const displayedUsers = filteredUsers.slice(0, recordsPerPage);
+
   return (
     <div className="container mt-4">
-      <div className="row mb-4 align-items-center">
-        <div className="col-12 col-md-8">
+      <div className="row mb-3 align-items-center">
+        <div className="col-md-6">
           <h1 className="text-left">Gestión de Usuarios</h1>
         </div>
-        <div className="col-12 col-md-4">
+        <div className="col-md-3">
           <input
             type="text"
-            placeholder="Buscar Usuario por nombre"
+            placeholder="Buscar usuario..."
             className="form-control shadow-sm"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
+        </div>
+        <div className="col-md-3 d-flex align-items-center">
+          <label className="me-2">Mostrar:</label>
+          <select
+            className="form-select"
+            value={recordsPerPage}
+            onChange={(e) => setRecordsPerPage(Number(e.target.value))}
+          >
+            <option value="3">3 registros</option>
+            <option value="5">5 registros</option>
+            <option value="10">10 registros</option>
+          </select>
         </div>
       </div>
 
@@ -56,7 +72,7 @@ const App = () => {
         </p>
       )}
 
-      {!loading && !error && <UserTable users={filteredUsers} onUserClick={handleUserClick} />}
+      {!loading && !error && <UserTable users={displayedUsers} onUserClick={handleUserClick} />}
 
       <Modal show={showModal} handleClose={handleClose} user={selectedUser} />
     </div>
